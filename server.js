@@ -2,10 +2,12 @@
 const express = require("express");
 const db = require("./config/db");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
 
 // Connect to PostgreSQL and test connection
