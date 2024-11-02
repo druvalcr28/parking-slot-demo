@@ -1,4 +1,4 @@
-// models/ParkingSlot.js
+// models/Parkingslot.js
 const db = require("../config/db");
 
 const getAllSlots = () => {
