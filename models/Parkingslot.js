@@ -58,10 +58,24 @@ const releaseSlot = (slotId) => {
   );
 };
 
+const addSlot = (slotNumber) => {
+  return db.query("INSERT INTO parking_slots (slot_number) VALUES ($1)", [
+    slotNumber,
+  ]);
+};
+
+const deleteSlot = (slotNumber) => {
+  return db.query("DELETE FROM parking_slots WHERE slot_number = $1", [
+    slotNumber,
+  ]);
+};
+
 module.exports = {
   getAllSlots,
   validateUser,
   getSlotStatus,
   bookSlot,
   releaseSlot,
+  addSlot,
+  deleteSlot,
 };
