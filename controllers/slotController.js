@@ -93,4 +93,50 @@ const deleteSlot = async (req, res) => {
   }
 };
 
-module.exports = { getAllSlots, bookSlot, releaseSlot, addSlot, deleteSlot };
+const calculateAmount = async (req, res) => {
+  const { slotId } = req.params;
+
+  try {
+    const slot = await ParkingSlot.getSlotById(slotId);
+
+    if (!slot) {
+      return res.status(404).json({ error: `Slot ${slotId} not found` });
+    }
+
+    if (!slot.booking_time) {
+      return res
+        .status(400)
+        .json({ error: `Slot ${slotId} is not currently booked` });
+    }
+
+    // Convert booking_time to IST
+    const bookingTime = new Date(slot.booking_time);
+    const currentTime = new Date();
+    const diffInMs = currentTime - bookingTime;
+    const hoursElapsed = Math.floor(diffInMs / (1000 * 60 * 60)); // Convert milliseconds to hours
+
+    // Calculate the amount
+    const ratePerHour = 30;
+    const amount = (hoursElapsed + 1) * ratePerHour; // +1 to include the first hour
+
+    res.json({
+      slot_id: slotId,
+      booking_time: bookingTime,
+      current_time: currentTime.toISOString(),
+      hours_elapsed: hoursElapsed,
+      amount: amount,
+    });
+  } catch (error) {
+    console.error("Error calculating amount:", error);
+    res.status(500).json({ error: "Failed to calculate the amount" });
+  }
+};
+
+module.exports = {
+  getAllSlots,
+  bookSlot,
+  releaseSlot,
+  addSlot,
+  deleteSlot,
+  calculateAmount,
+};

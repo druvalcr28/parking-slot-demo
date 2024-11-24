@@ -1,4 +1,3 @@
-// models/Parkingslot.js
 const db = require("../config/db");
 
 const getAllSlots = () => {
@@ -44,16 +43,45 @@ const getSlotStatus = (slotId) => {
     });
 };
 
+const getSlotById = (slotId) => {
+  return db
+    .query(
+      `SELECT
+      ps.slot_number,
+      ps.booking_time,
+      u.username AS booked_by
+    FROM
+      parking_slots ps
+    LEFT JOIN 
+      users u 
+    ON 
+      ps.booked_by = u.id
+    WHERE
+      ps.slot_number = $1`,
+      [slotId]
+    )
+    .then((result) => {
+      if (result.rowCount === 0) {
+        return null;
+      }
+      return result.rows[0]; // Returns the slot details
+    });
+};
+
 const bookSlot = (slotId, userId) => {
   return db.query(
-    "UPDATE parking_slots SET booked_by = $1 WHERE slot_number = $2",
+    `UPDATE parking_slots 
+     SET booked_by = $1, booking_time = NOW()
+     WHERE slot_number = $2`,
     [userId, slotId]
   );
 };
 
 const releaseSlot = (slotId) => {
   return db.query(
-    "UPDATE parking_slots SET booked_by = NULL WHERE slot_number = $1",
+    `UPDATE parking_slots 
+     SET booked_by = NULL, booking_time = NULL 
+     WHERE slot_number = $1`,
     [slotId]
   );
 };
@@ -74,6 +102,7 @@ module.exports = {
   getAllSlots,
   validateUser,
   getSlotStatus,
+  getSlotById,
   bookSlot,
   releaseSlot,
   addSlot,

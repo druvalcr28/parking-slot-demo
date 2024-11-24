@@ -6,11 +6,13 @@ const {
   releaseSlot,
   addSlot,
   deleteSlot,
+  calculateAmount,
 } = require("../controllers/slotController");
 
 const router = express.Router();
 
 router.get("/", getAllSlots);
+router.get("/amount/:slotId", calculateAmount);
 router.post("/book/:slotId", bookSlot);
 router.post("/release/:slotId", releaseSlot);
 router.post("/", addSlot);

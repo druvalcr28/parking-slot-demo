@@ -8,10 +8,10 @@ exports.seed = function (knex) {
         { slot_number: 1, booked_by: null }, // Available
         { slot_number: 2, booked_by: null }, // Available
         { slot_number: 3, booked_by: null }, // Available
-        { slot_number: 4, booked_by: 3 },
+        { slot_number: 4, booked_by: null }, // Available
         { slot_number: 5, booked_by: null }, // Available
         { slot_number: 6, booked_by: null }, // Available
-        { slot_number: 7, booked_by: 5 },
+        { slot_number: 7, booked_by: null }, // Available
         { slot_number: 8, booked_by: null }, // Available
         { slot_number: 9, booked_by: null }, // Available
         { slot_number: 10, booked_by: null }, // Available
