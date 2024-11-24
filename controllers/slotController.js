@@ -109,22 +109,21 @@ const calculateAmount = async (req, res) => {
         .json({ error: `Slot ${slotId} is not currently booked` });
     }
 
-    // Convert booking_time to IST
-    const bookingTime = new Date(slot.booking_time);
-    const currentTime = new Date();
-    const diffInMs = currentTime - bookingTime;
-    const hoursElapsed = Math.floor(diffInMs / (1000 * 60 * 60)); // Convert milliseconds to hours
+    const booking_time = new Date(slot.booking_time);
+    const current_time = new Date();
+    const diff_in_ms = current_time - booking_time;
+    const hours_elapsed = Math.floor(diff_in_ms / (1000 * 60 * 60)); // Convert milliseconds to hours
 
     // Calculate the amount
-    const ratePerHour = 30;
-    const amount = (hoursElapsed + 1) * ratePerHour; // +1 to include the first hour
+    const rate_per_hour = 30;
+    const amount = (hours_elapsed + 1) * rate_per_hour; // +1 to include the first hour
 
     res.json({
       slot_id: slotId,
-      booking_time: bookingTime,
-      current_time: currentTime.toISOString(),
-      hours_elapsed: hoursElapsed,
-      amount: amount,
+      booking_time,
+      current_time: current_time.toISOString(),
+      hours_elapsed,
+      amount,
     });
   } catch (error) {
     console.error("Error calculating amount:", error);
